@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html, body, #root {
+  background-color: #F7F1E8;
+  color: #302637;
+  overflow-x: clip;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* ─── Typography: two-font system ──────────────────────────────────
+   Kanit   → display / headings (h1–h4, large numbers, hero titles)
+   Manrope → body / UI (paragraphs, nav, buttons, labels, captions)
+──────────────────────────────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6,
+.font-display,
+.hero-heading {
+  font-family: 'Kanit', sans-serif;
+}
+
+body,
+p,
+a,
+button,
+input,
+textarea,
+label,
+span,
+li,
+figcaption,
+.font-body {
+  font-family: 'Manrope', sans-serif;
+  line-height: 1.65;
+  letter-spacing: -0.01em;
+}
+
+/* Force Kanit on elements that should always be display font */
+.font-kanit { font-family: 'Kanit', sans-serif !important; }
+
+.main-wrapper {
+  background-color: #F7F1E8;
+  overflow-x: clip;
+  width: 100%;
+  position: relative;
+}
+
+/* ─── Hero Gradient Heading ───────────────────────────────────────── */
+.hero-heading {
+  background: linear-gradient(180deg, #8D6AAE 0%, #C9B6E4 55%, #B79BCF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-family: 'Kanit', sans-serif;
+}
+
+/* ─── Custom scrollbar ───────────────────────────────────────────── */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track  { background: #F7F1E8; }
+::-webkit-scrollbar-thumb  { background: #C9B6E4; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #8D6AAE; }
