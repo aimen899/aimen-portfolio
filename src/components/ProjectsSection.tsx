@@ -109,34 +109,47 @@ const Card: React.FC<CardProps> = ({ project, index, progress, range, targetScal
         </p>
 
         {/* Bottom Row: Two-Column Image Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 w-full items-stretch">
-          {/* Left Column (40% width -> md:col-span-5) - 2 Stacked Images */}
-          <div className="md:col-span-5 flex flex-col gap-4 sm:gap-6 justify-between">
-            <div className="w-full overflow-hidden rounded-[24px] sm:rounded-[36px] md:rounded-[40px] border border-[#8D6AAE]/25 bg-[#E8DDF2]">
-              <img
-                src={project.col1Image1}
-                alt={`${project.name} Screenshot 1`}
-                className="w-full object-cover rounded-[24px] sm:rounded-[36px] md:rounded-[40px] hover:scale-105 transition-transform duration-500"
-                style={{ height: 'clamp(130px, 16vw, 230px)' }}
-              />
-            </div>
-            <div className="w-full overflow-hidden rounded-[24px] sm:rounded-[36px] md:rounded-[40px] border border-[#8D6AAE]/25 bg-[#E8DDF2]">
-              <img
-                src={project.col1Image2}
-                alt={`${project.name} Screenshot 2`}
-                className="w-full object-cover rounded-[24px] sm:rounded-[36px] md:rounded-[40px] hover:scale-105 transition-transform duration-500"
-                style={{ height: 'clamp(160px, 22vw, 340px)' }}
-              />
-            </div>
-          </div>
-
-          {/* Right Column (60% width -> md:col-span-7) - 1 Tall Image */}
-          <div className="md:col-span-7 w-full overflow-hidden rounded-[24px] sm:rounded-[36px] md:rounded-[40px] border border-[#8D6AAE]/25 bg-[#E8DDF2] h-full min-h-[250px] sm:min-h-[320px]">
+        {/* Mobile: single featured image. Desktop: two-column grid */}
+        <div className="w-full">
+          {/* Mobile: just the tall dashboard image */}
+          <div className="md:hidden w-full overflow-hidden rounded-[24px] border border-[#8D6AAE]/25 bg-[#E8DDF2]" style={{ height: 'clamp(200px, 50vw, 320px)' }}>
             <img
               src={project.col2Image}
               alt={`${project.name} Dashboard`}
-              className="w-full h-full object-cover rounded-[24px] sm:rounded-[36px] md:rounded-[40px] hover:scale-105 transition-transform duration-500"
+              className="w-full h-full object-cover rounded-[24px] hover:scale-105 transition-transform duration-500"
             />
+          </div>
+
+          {/* Desktop: full two-column grid */}
+          <div className="hidden md:grid md:grid-cols-12 gap-4 sm:gap-6 w-full items-stretch">
+            {/* Left Column - 2 Stacked Images */}
+            <div className="md:col-span-5 flex flex-col gap-4 sm:gap-6 justify-between">
+              <div className="w-full overflow-hidden rounded-[24px] sm:rounded-[36px] md:rounded-[40px] border border-[#8D6AAE]/25 bg-[#E8DDF2]">
+                <img
+                  src={project.col1Image1}
+                  alt={`${project.name} Screenshot 1`}
+                  className="w-full object-cover rounded-[24px] sm:rounded-[36px] md:rounded-[40px] hover:scale-105 transition-transform duration-500"
+                  style={{ height: 'clamp(130px, 16vw, 230px)' }}
+                />
+              </div>
+              <div className="w-full overflow-hidden rounded-[24px] sm:rounded-[36px] md:rounded-[40px] border border-[#8D6AAE]/25 bg-[#E8DDF2]">
+                <img
+                  src={project.col1Image2}
+                  alt={`${project.name} Screenshot 2`}
+                  className="w-full object-cover rounded-[24px] sm:rounded-[36px] md:rounded-[40px] hover:scale-105 transition-transform duration-500"
+                  style={{ height: 'clamp(160px, 22vw, 340px)' }}
+                />
+              </div>
+            </div>
+
+            {/* Right Column - 1 Tall Image */}
+            <div className="md:col-span-7 w-full overflow-hidden rounded-[24px] sm:rounded-[36px] md:rounded-[40px] border border-[#8D6AAE]/25 bg-[#E8DDF2] h-full min-h-[250px] sm:min-h-[320px]">
+              <img
+                src={project.col2Image}
+                alt={`${project.name} Dashboard`}
+                className="w-full h-full object-cover rounded-[24px] sm:rounded-[36px] md:rounded-[40px] hover:scale-105 transition-transform duration-500"
+              />
+            </div>
           </div>
         </div>
       </motion.div>

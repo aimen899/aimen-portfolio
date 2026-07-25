@@ -10,6 +10,9 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 html, body, #root {
@@ -20,35 +23,44 @@ html, body, #root {
   min-height: 100vh;
 }
 
-/* ─── Typography: two-font system ──────────────────────────────────
-   Kanit   → display / headings (h1–h4, large numbers, hero titles)
-   Manrope → body / UI (paragraphs, nav, buttons, labels, captions)
-──────────────────────────────────────────────────────────────────── */
+body {
+  /* Prevent layout thrashing from root will-change */
+}
+
+/* ─── Lenis Smooth Scroll CSS ───────────────────────────────────── */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ─── Typography ─────────────────────────────────────────────────── */
 h1, h2, h3, h4, h5, h6,
 .font-display,
 .hero-heading {
   font-family: 'Kanit', sans-serif;
 }
 
-body,
-p,
-a,
-button,
-input,
-textarea,
-label,
-span,
-li,
-figcaption,
+body, p, a, button, input, textarea, label, span, li, figcaption,
 .font-body {
   font-family: 'Manrope', sans-serif;
   line-height: 1.65;
   letter-spacing: -0.01em;
 }
 
-/* Force Kanit on elements that should always be display font */
 .font-kanit { font-family: 'Kanit', sans-serif !important; }
 
+/* ─── Layout containment for paint perf ──────────────────────────── */
 .main-wrapper {
   background-color: #F7F1E8;
   overflow-x: clip;
@@ -65,8 +77,48 @@ figcaption,
   font-family: 'Kanit', sans-serif;
 }
 
+/* ─── GPU compositing helpers ─────────────────────────────────────── */
+.gpu-layer {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* ─── Smooth transitions for all interactive elements ─────────────── */
+a, button {
+  transition-property: transform, opacity, color, background-color, box-shadow, border-color;
+  transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+  transition-duration: 300ms;
+}
+
+a:active, button:active {
+  transform: scale(0.97);
+}
+
+/* ─── Image smoothness ───────────────────────────────────────────── */
+img {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
 /* ─── Custom scrollbar ───────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track  { background: #F7F1E8; }
-::-webkit-scrollbar-thumb  { background: #C9B6E4; border-radius: 4px; }
+::-webkit-scrollbar-thumb  {
+  background: #C9B6E4;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
 ::-webkit-scrollbar-thumb:hover { background: #8D6AAE; }
+
+/* ─── DNA glow helpers (used by RAF-driven opacity) ──────────── */
+
+/* ─── Reduced motion preference ──────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -4,16 +4,17 @@ import { motion, useSpring } from 'framer-motion';
 interface MagnetProps {
   children: React.ReactNode;
   className?: string;
+  enabled?: boolean;
 }
 
 export const Magnet: React.FC<MagnetProps> = ({
   children,
-  className = ""
+  className = "",
+  enabled = true,
 }) => {
-  const [isTouchOrReducedMotion, setIsTouchOrReducedMotion] = useState(false);
+  const [isReducedMotion, setIsReducedMotion] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  // Spring physics for buttery smooth cursor following
   const springConfig = { damping: 12, stiffness: 200, mass: 0.5 };
   const xSpring = useSpring(0, springConfig);
   const ySpring = useSpring(0, springConfig);
@@ -21,39 +22,30 @@ export const Magnet: React.FC<MagnetProps> = ({
   const rotateYSpring = useSpring(0, { damping: 25, stiffness: 90, mass: 1 });
 
   useEffect(() => {
-    const touchMedia = window.matchMedia('(pointer: coarse)');
     const motionMedia = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-    const update = () => {
-      setIsTouchOrReducedMotion(touchMedia.matches || motionMedia.matches);
-    };
-
+    const update = () => setIsReducedMotion(motionMedia.matches);
     update();
-    touchMedia.addEventListener('change', update);
     motionMedia.addEventListener('change', update);
-    return () => {
-      touchMedia.removeEventListener('change', update);
-      motionMedia.removeEventListener('change', update);
-    };
+    return () => motionMedia.removeEventListener('change', update);
   }, []);
 
+  // Desktop: mouse tracking
   useEffect(() => {
-    if (isTouchOrReducedMotion) return;
+    if (isReducedMotion || !enabled) {
+      xSpring.set(0);
+      ySpring.set(0);
+      rotateXSpring.set(0);
+      rotateYSpring.set(0);
+      return;
+    }
 
     const handleMouseMove = (e: MouseEvent) => {
-      // Track cursor relative to whole viewport — always active, full range
       const vw = window.innerWidth;
       const vh = window.innerHeight;
-
-      // Normalize cursor to -1 → +1 across full window
-      const normX = (e.clientX / vw) * 2 - 1; // -1 = left edge, +1 = right edge
-      const normY = (e.clientY / vh) * 2 - 1; // -1 = top edge,  +1 = bottom edge
-
-      // Viewport-driven movement: avatar travels ~35% of viewport in each axis
+      const normX = (e.clientX / vw) * 2 - 1;
+      const normY = (e.clientY / vh) * 2 - 1;
       const moveX = normX * vw * 0.35;
       const moveY = normY * vh * 0.2;
-
-      // 3D tilt: head tilts toward cursor
       const rotY = normX * 20;
       const rotX = -normY * 15;
 
@@ -77,10 +69,47 @@ export const Magnet: React.FC<MagnetProps> = ({
       window.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseleave', handleMouseLeave);
     };
-  }, [isTouchOrReducedMotion, xSpring, ySpring, rotateXSpring, rotateYSpring]);
+  }, [isReducedMotion, enabled, xSpring, ySpring, rotateXSpring, rotateYSpring]);
 
-  if (isTouchOrReducedMotion) {
-    // Idle float only — no cursor tracking on touch / reduced-motion
+  // Mobile: touch tracking
+  useEffect(() => {
+    if (isReducedMotion || !enabled) return;
+
+    const handleTouchMove = (e: TouchEvent) => {
+      const touch = e.touches[0];
+      if (!touch) return;
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const normX = (touch.clientX / vw) * 2 - 1;
+      const normY = (touch.clientY / vh) * 2 - 1;
+      const moveX = normX * vw * 0.25;
+      const moveY = normY * vh * 0.15;
+      const rotY = normX * 15;
+      const rotX = -normY * 10;
+
+      xSpring.set(moveX);
+      ySpring.set(moveY);
+      rotateXSpring.set(rotX);
+      rotateYSpring.set(rotY);
+    };
+
+    const handleTouchEnd = () => {
+      xSpring.set(0);
+      ySpring.set(0);
+      rotateXSpring.set(0);
+      rotateYSpring.set(0);
+    };
+
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('touchend', handleTouchEnd);
+
+    return () => {
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [isReducedMotion, enabled, xSpring, ySpring, rotateXSpring, rotateYSpring]);
+
+  if (isReducedMotion) {
     return (
       <motion.div
         className={`inline-block ${className}`}

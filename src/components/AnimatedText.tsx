@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useMemo } from 'react';
 import { motion, useScroll, useTransform, MotionValue } from 'framer-motion';
 
 interface AnimatedTextProps {
@@ -6,34 +6,39 @@ interface AnimatedTextProps {
   className?: string;
 }
 
-interface CharacterProps {
-  char: string;
+interface WordProps {
+  word: string;
   range: [number, number];
   progress: MotionValue<number>;
 }
 
-const Character: React.FC<CharacterProps> = ({ char, range, progress }) => {
+const Word: React.FC<WordProps> = ({ word, range, progress }) => {
   const opacity = useTransform(progress, range, [0.25, 1]);
   return (
-    <span className="relative inline-block">
-      <span className="opacity-25 text-[#6F6268]">{char}</span>
+    <span className="relative inline-block mr-[0.28em]">
+      <span className="opacity-25 text-[#6F6268]">{word}</span>
       <motion.span style={{ opacity }} className="absolute left-0 top-0 text-[#302637]">
-        {char}
+        {word}
       </motion.span>
     </span>
   );
 };
 
-export const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className = "" }) => {
+export const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className = '' }) => {
   const containerRef = useRef<HTMLParagraphElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ['start 0.8', 'end 0.2'],
+    offset: ['start 0.85', 'end 0.25'],
   });
 
-  const words = text.split(' ');
-  let charCount = 0;
-  const totalChars = text.length;
+  const wordsWithRanges = useMemo(() => {
+    const words = text.split(' ');
+    const totalWords = words.length;
+    return words.map((word, i) => ({
+      word,
+      range: [i / totalWords, (i + 1) / totalWords] as [number, number],
+    }));
+  }, [text]);
 
   return (
     <p
@@ -41,26 +46,9 @@ export const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className = ""
       className={`text-[#302637] font-medium text-center leading-relaxed max-w-[560px] ${className}`}
       style={{ fontSize: 'clamp(1rem, 2vw, 1.35rem)' }}
     >
-      {words.map((word, wordIdx) => {
-        const chars = word.split('');
-        return (
-          <span key={wordIdx} className="inline-block whitespace-nowrap mr-[0.28em]">
-            {chars.map((char, charIdx) => {
-              const start = charCount / totalChars;
-              charCount++;
-              const end = charCount / totalChars;
-              return (
-                <Character
-                  key={charIdx}
-                  char={char}
-                  range={[start, end]}
-                  progress={scrollYProgress}
-                />
-              );
-            })}
-          </span>
-        );
-      })}
+      {wordsWithRanges.map(({ word, range }, idx) => (
+        <Word key={idx} word={word} range={range} progress={scrollYProgress} />
+      ))}
     </p>
   );
 };

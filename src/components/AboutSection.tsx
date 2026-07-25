@@ -24,7 +24,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onContactClick }) =>
           <img
             src="https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/moon_icon.11395d36.png"
             alt="3D Moon Icon"
-            className="w-[120px] sm:w-[160px] md:w-[210px] h-auto object-contain drop-shadow-[0_10px_20px_rgba(141,106,174,0.25)]"
+            className="w-[60px] sm:w-[100px] md:w-[210px] h-auto object-contain drop-shadow-[0_10px_20px_rgba(141,106,174,0.25)]"
           />
         </FadeIn>
       </div>
@@ -35,7 +35,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onContactClick }) =>
           <img
             src="https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/p59_1.4659672e.png"
             alt="3D Floating Shape"
-            className="w-[100px] sm:w-[140px] md:w-[180px] h-auto object-contain drop-shadow-[0_10px_20px_rgba(141,106,174,0.25)]"
+            className="w-[50px] sm:w-[90px] md:w-[180px] h-auto object-contain drop-shadow-[0_10px_20px_rgba(141,106,174,0.25)]"
           />
         </FadeIn>
       </div>
@@ -46,7 +46,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onContactClick }) =>
           <img
             src="https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/lego_icon-1.703bb594.png"
             alt="3D Lego Icon"
-            className="w-[120px] sm:w-[160px] md:w-[210px] h-auto object-contain drop-shadow-[0_10px_20px_rgba(141,106,174,0.25)]"
+            className="w-[60px] sm:w-[100px] md:w-[210px] h-auto object-contain drop-shadow-[0_10px_20px_rgba(141,106,174,0.25)]"
           />
         </FadeIn>
       </div>
@@ -57,7 +57,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onContactClick }) =>
           <img
             src="https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/Group_134-1.2e04f3ce.png"
             alt="3D Group Object"
-            className="w-[130px] sm:w-[170px] md:w-[220px] h-auto object-contain drop-shadow-[0_10px_20px_rgba(141,106,174,0.25)]"
+            className="w-[65px] sm:w-[110px] md:w-[220px] h-auto object-contain drop-shadow-[0_10px_20px_rgba(141,106,174,0.25)]"
           />
         </FadeIn>
       </div>
